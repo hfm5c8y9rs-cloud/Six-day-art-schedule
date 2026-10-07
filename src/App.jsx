@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { CalendarDays, ChevronLeft, ChevronRight, Clock3, Download, FileUp, Home, RotateCcw, SkipForward, Undo2 } from 'lucide-react';
 
 const START='2026-08-24', END='2027-06-09', STORE='art-pwa-v4';
-const templates={1:['Free','Free','Cantin','Alston'],2:['Graham','Horne','Evans','Free'],3:['EBS 2','Fray','Ward','Edwards'],4:['Jackson','Free','Wells','Reece'],5:['Kane','Radford','Free','Rogers'],6:['Trogdon','Hearley','ECS','Free']};
+const templates={1:['Free','Free','Cantin','Alston'],2:['Graham','Horne','Evans','Free'],3:['EBS 2','Fray','Ward','Edwards'],4:['Jackson','Free','Wells','Reece'],5:['Kane','Radford','Free','Rogers'],6:['Trogdon','Hearley','ECS','EBS-1']};
 const periods=[['8:00 - 8:30','Hallway Duty (not 4th grade)'],['8:50 - 9:35','4th'],['9:55 - 10:40',null],['10:50 - 11:35',null],['11:35 - 12:10','Lunch'],['12:10 - 12:55',null],['12:55 - 1:40',null],['1:40 - 2:30','5th'],['2:30 - 3:00','Clean Up / Prepare for carpool'],['3:00 - 3:30','Afternoon Carpool']];
 const closures={'2026-09-07':'Holiday','2026-09-21':'Teacher Workday','2026-10-12':'Teacher Workday','2026-11-03':'Teacher Workday','2026-11-11':'Holiday','2026-11-25':'Vacation Day','2026-11-26':'Holiday','2026-11-27':'Holiday','2026-12-21':'Teacher Workday','2026-12-22':'Teacher Workday','2026-12-23':'Vacation Day','2026-12-24':'Holiday','2026-12-25':'Holiday','2026-12-28':'Holiday','2026-12-29':'Vacation Day','2026-12-30':'Vacation Day','2026-12-31':'Vacation Day','2027-01-01':'Holiday','2027-01-18':'Holiday','2027-01-19':'Teacher Workday','2027-02-15':'Teacher Workday','2027-03-10':'Teacher Workday','2027-03-26':'Holiday','2027-03-29':'Vacation Day','2027-03-30':'Vacation Day','2027-03-31':'Vacation Day','2027-04-01':'Vacation Day','2027-04-02':'Vacation Day','2027-04-05':'Teacher Workday','2027-05-17':'Teacher Workday','2027-05-31':'Holiday'};
 const builtIn=['2026-09-11'];
@@ -15,7 +15,7 @@ const clockMinutes=text=>{const [h,m]=text.trim().split(':').map(Number);return 
 const parseRange=text=>{const [a,b]=text.split('-').map(x=>x.trim());return [clockMinutes(a),clockMinutes(b)]};
 const timeLabel=d=>d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 function schedule(day){let i=0;return periods.map(([time,fixed])=>({time,name:fixed??templates[day][i++]}))}
-function tone(n){if(n==='4th')return'yellow';if(['Graham','EBS 2','Jackson','Kane','Trogdon'].includes(n))return'pink';if(['Horne','Fray','Radford','Hearley'].includes(n))return'orange';if(['Cantin','Evans','Ward','Wells','ECS'].includes(n))return'blue';if(['Alston','Edwards','Reece','Rogers'].includes(n))return'purple';if(['5th','Free','Clean Up / Prepare for carpool'].includes(n))return'green';if(n==='Lunch')return'cream';return'white'}
+function tone(n){if(n==='4th')return'yellow';if(['Graham','EBS 2','Jackson','Kane','Trogdon'].includes(n))return'pink';if(['Horne','Fray','Radford','Hearley'].includes(n))return'orange';if(['Cantin','Evans','Ward','Wells','ECS','EBS-1'].includes(n))return'blue';if(['Alston','Edwards','Reece','Rogers'].includes(n))return'purple';if(['5th','Free','Clean Up / Prepare for carpool'].includes(n))return'green';if(n==='Lunch')return'cream';return'white'}
 function getSaved(){try{return JSON.parse(localStorage.getItem(STORE))||{pushes:[]}}catch{return{pushes:[]}}}
 function liveState(rows,selected,now){
  if(selected!==I(now)||!rows)return{active:-1,next:null,progress:0,mode:'off'};
